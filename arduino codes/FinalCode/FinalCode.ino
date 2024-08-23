@@ -341,10 +341,10 @@ void updateDisplay1() {
     display1.setTextColor(SSD1306_WHITE);
 
     display1.setCursor(0, 0);
-    display1.print("Date:");
+    display1.print("Date: ");
     if (gps.date.isValid()) {
-        //display1.print(gps.date.year());
-        //display1.print("/");
+        display1.print(gps.date.year());
+        display1.print("/");
         display1.print(gps.date.month());
         display1.print("/");
         display1.println(gps.date.day());
@@ -353,7 +353,7 @@ void updateDisplay1() {
     }
 
     display1.setCursor(0, 16);
-    display1.print("Time:");
+    display1.print("Time: ");
     if (gps.time.isValid()) {
         int hour = gps.time.hour();
         int minute = gps.time.minute();
@@ -374,9 +374,9 @@ void updateDisplay1() {
         display1.print(":");
         if (gps.time.second() < 10) display1.print("0");
         display1.print(gps.time.second());
-        //display1.print(".");
-        //if (gps.time.centisecond() < 10) display1.print("0");
-        //display1.println(gps.time.centisecond());
+        display1.print(".");
+        if (gps.time.centisecond() < 10) display1.print("0");
+        display1.println(gps.time.centisecond());
     } else {
         display1.println("N/A");
     }
@@ -392,7 +392,7 @@ void updateDisplay1() {
     } else {
         display1.println("N/A");
     }*/
-    display1.setCursor(0,48);
+    display1.setCursor(0,32);
     display1.print("Battery:");
     display1.print(percentage);
     display1.println(" %");
