@@ -31,6 +31,8 @@ String Label;
 
 //distance treadshold
 const double distanceThreshold = 1.0; // 1 meter threshold
+int deltaDistance = 0;
+
 
 // OLED display dimensions
 #define SCREEN_WIDTH 128
@@ -273,14 +275,16 @@ void updateHeartRate() {
 void measureStepCount() {
     static unsigned long lastStepTime = 0;
     float x, y, z;
-    if (IMU.accelerationAvailable()) {
-        IMU.readAcceleration(x, y, z);
-        if (sqrt(x * x + y * y + z * z) > STEP_THRESHOLD) {
-            if (millis() - lastStepTime > 300) {
-                stepCount++;
-                lastStepTime = millis();
-            }
-        }
+    if(deltaDistance > 0){
+      if (IMU.accelerationAvailable()) {
+          IMU.readAcceleration(x, y, z);
+          if (sqrt(x * x + y * y + z * z) > STEP_THRESHOLD) {
+              if (millis() - lastStepTime > 300) {
+                  stepCount++;
+                  lastStepTime = millis();
+              }
+          }
+      }
     }
 }
 
@@ -329,7 +333,7 @@ void measureBattery() {
     int avgSensorValue = sum / numReadings;
 
     float voltageDividerOutput = avgSensorValue * (3.3 / 1023.0);
-    voltage = voltageDividerOutput * 2;
+    voltage = voltageDividerOutput;
 
     percentage = map(voltage * 100, 300, 420, 0, 100);
     percentage = constrain(percentage, 0, 100);
@@ -341,10 +345,10 @@ void updateDisplay1() {
     display1.setTextColor(SSD1306_WHITE);
 
     display1.setCursor(0, 0);
-    display1.print("Date: ");
+    display1.print("Date:");
     if (gps.date.isValid()) {
-        display1.print(gps.date.year());
-        display1.print("/");
+        //display1.print(gps.date.year());
+        //display1.print("/");
         display1.print(gps.date.month());
         display1.print("/");
         display1.println(gps.date.day());
@@ -353,7 +357,7 @@ void updateDisplay1() {
     }
 
     display1.setCursor(0, 16);
-    display1.print("Time: ");
+    display1.print("Time:");
     if (gps.time.isValid()) {
         int hour = gps.time.hour();
         int minute = gps.time.minute();
@@ -374,9 +378,9 @@ void updateDisplay1() {
         display1.print(":");
         if (gps.time.second() < 10) display1.print("0");
         display1.print(gps.time.second());
-        display1.print(".");
-        if (gps.time.centisecond() < 10) display1.print("0");
-        display1.println(gps.time.centisecond());
+        //display1.print(".");
+        //if (gps.time.centisecond() < 10) display1.print("0");
+        //display1.println(gps.time.centisecond());
     } else {
         display1.println("N/A");
     }
@@ -392,10 +396,10 @@ void updateDisplay1() {
     } else {
         display1.println("N/A");
     }*/
-    display1.setCursor(0,32);
-    display1.print("Battery:");
+    display1.setCursor(0,48);
+    display1.print("Bttry:");
     display1.print(percentage);
-    display1.println(" %");
+    display1.println("%");
   
 
     display1.display();
